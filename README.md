@@ -16,7 +16,7 @@ Test-ADPester
 
 ## Example output
 
-![Pester AD Example](https://evotec.xyz/wp-content/uploads/2018/07/PesterAD.png)
+![Pester AD Example](https://evotec.xyz/wp-content/uploads/2018/07/ADPester-TheMovie.gif)
 
 ```powershell
 Describing Domain Controller Infrastructure Test
