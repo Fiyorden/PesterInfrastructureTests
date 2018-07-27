@@ -1,8 +1,9 @@
 # PesterInfrastructureTests
-A collection of infrastructure related tests for use with Pester &amp; PowerShell.
 
 
-![Image](https://raw.githubusercontent.com/EvotecIT/PesterInfrastructureTests/master/Images/PesterAD.png)
+
+
+![Pester AD Example](https://evotec.xyz/wp-content/uploads/2018/07/PesterAD.png)
 
 
 ```
