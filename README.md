@@ -1,9 +1,24 @@
-# PesterInfrastructureTests
+# PesterInfrastructureTests - PowerShell Module
+
+*PesterInfrastructureTests* is PowerShell module allowing to test Active Directory (for now) in fast and efficient way. You can run it in 2 ways as described below. Depending on how you like to approach things you can either copy code or simply install it from PowerShellGallery. I prefer 2nd way so I can update this code in one place and then simply redeploy everywhere with *Update-Module*
+
+## Copy code Public Directory
+
+Simply copy code from *Public\ActiveDirectory.ps1* and run it as you like.
+
+## Module from PowerShellGallery way
+
+```powershell
+Install-Module PesterInfrastructureTests -Force -SkipPublisherCheck
+#Update-Module PesterInfrastructureTests -Force # You can use this line to update the module later on
+Test-ADPester
+```
+
+## Example output
 
 ![Pester AD Example](https://evotec.xyz/wp-content/uploads/2018/07/PesterAD.png)
 
-
-```
+```powershell
 Describing Domain Controller Infrastructure Test
   [+] Active Directory Forest is available 214ms
   [+] Active Directory Domain is available 74ms
