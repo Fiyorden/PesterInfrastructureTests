@@ -1,4 +1,4 @@
-function Test-ADPester {
+function Test-ADPesterFR {
     Describe -Name 'Domain Controller Infrastructure Test' {
         try {
             $AllDomains = (get-adforest -ErrorAction Stop).Domains
@@ -32,23 +32,23 @@ function Test-ADPester {
                         $Port.TcpTestSucceeded | Should -Be $true
                     }
                     It -Name "$DC01 DNS Service is Running" {
-                        $DNSsvc = Get-Service -ComputerName $DC01 -DisplayName 'DNS Server' -ErrorAction Stop
+                        $DNSsvc = Get-Service -ComputerName $DC01 -Name 'DNS' -ErrorAction Stop
                         $DNSsvc.Status | Should -BeExactly 'Running'
                     }
                     It -Name "$DC01 ADDS Service is Running" {
-                        $NTDSsvc = Get-Service -ComputerName $DC01 -DisplayName 'Active Directory Domain Services' -ErrorAction Stop
+                        $NTDSsvc = Get-Service -ComputerName $DC01 -Name 'NTDS' -ErrorAction Stop
                         $NTDSsvc.Status | Should -BeExactly 'Running'
                     }
                     It -Name "$DC01 ADWS Service is Running" {
-                        $ADWSsvc = Get-Service -ComputerName $DC01 -DisplayName 'Active Directory Web Services' -ErrorAction Stop
+                        $ADWSsvc = Get-Service -ComputerName $DC01 -Name 'ADWS' -ErrorAction Stop
                         $ADWSsvc.Status | Should -BeExactly 'Running'
                     }
                     It -Name "$DC01 KDC Service is Running" {
-                        $KDCsvc = Get-Service -ComputerName $DC01 -DisplayName 'Kerberos Key Distribution Center' -ErrorAction Stop
+                        $KDCsvc = Get-Service -ComputerName $DC01 -Name 'Kdc' -ErrorAction Stop
                         $KDCsvc.Status | Should -BeExactly 'Running'
                     }
                     It -Name "$DC01 Netlogon Service is Running" {
-                        $Netlogonsvc = Get-Service -ComputerName $DC01 -DisplayName 'Netlogon' -ErrorAction Stop
+                        $Netlogonsvc = Get-Service -ComputerName $DC01 -Name 'Netlogon' -ErrorAction Stop
                         $Netlogonsvc.Status | Should -BeExactly 'Running'
                     }
                 }
@@ -62,30 +62,20 @@ function Test-ADPester {
                 #room for future tests if needed
             }
             Context 'Replication Link Status' {
-
                 $results = repadmin /showrepl * /csv | ConvertFrom-Csv # Get the results of all replications between all DCs
-
-                $groups = $results | Group-Object -Property 'Source DSA' # Group the results by the source DC
-
+                $groups = $results | Group-Object -Property 'Site DSA source' # Group the results by the source DC
                 foreach ($sourcedsa in $groups) {
                     # Create a context for each source DC
-
-                    Context "Source DSA = $($sourcedsa.Name)" {
-
+                    Context "Site DSA source = $($sourcedsa.Name)" {
                         $targets = $sourcedsa.Group # Assign the value of the groupings to another var since .Group doesn't implement IComparable
-
-                        $targetdsa = $targets | Group-Object -Property 'Destination DSA' # Now group within this source DC by the destination DC (pulling naming contexts per source and destination together)
-
+                        $targetdsa = $targets | Group-Object -Property 'Site DSA de destination' # Now group within this source DC by the destination DC (pulling naming contexts per source and destination together)
                         foreach ($target in $targetdsa ) {
                             # Create a context for each destination DSA
-
                             Context "Target DSA = $($target.Name)" {
-
                                 foreach ($entry in $target.Group) {
                                     # List out the results and check each naming context for failures
-
-                                    It "$($entry.'Naming Context') - should have zero replication failures" {
-                                        $entry.'Number of failures' | Should Be 0
+                                    It "$($entry.'Contexte de nom') - should have zero replication failures" {
+                                        $entry."Nombre d'échecs" | Should Be 0
                                     }
                                 }
                             }
@@ -94,6 +84,5 @@ function Test-ADPester {
                 }
             }
         }
-
     }
 }
